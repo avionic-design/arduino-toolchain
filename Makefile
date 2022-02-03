@@ -8,6 +8,8 @@ BIT := $(shell /bin/sh -c 'if test  "$$(uname -i)" = x86_64; then echo 64bit; el
 ARDUINO_PFM := arduino:avr
 ARDUINO_BRD := nano
 ARDUINO_CPU := atmega328
+ARDUINO_SRC := src
+ARDUINO_SKETCH := main
 ARDUINO_CLI_VER := 0.20.2
 ARDUINO_CLI_LNK := https://github.com/arduino/arduino-cli/releases/download
 ARDUINO_FILE_BIN := bin
@@ -23,6 +25,8 @@ ARDUINO_CLI_BIN := $(ARDUINO_FILE_BIN)/arduino-cli
 ARDUINO_CLI_YML := $(ARDUINO_FILE_ETC)/arduino-cli.yml
 ARDUINO_CLI_TAR := arduino-cli_$(ARDUINO_CLI_VER)_Linux_$(BIT).tar.gz
 ARDUINO_OPT_CPU := $(shell /bin/sh -c "test -n '$(ARDUINO_CPU)' && echo ':cpu=$(ARDUINO_CPU)'")
+ARDUINO_INO_FILE := $(ARDUINO_SKETCH).ino
+ARDUINO_INO_PATH := $(ARDUINO_SRC)/$(ARDUINO_INO_FILE)
 ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_OPT_CPU)
 
 .PHONY: compile upload all clean mrproper distclean
@@ -53,6 +57,22 @@ $(ARDUINO_CLI_YML):
 	echo "---"                >  $(ARDUINO_CLI_YML)
 	echo "board_manager:"     >> $(ARDUINO_CLI_YML)
 	echo "  additional_urls:" >> $(ARDUINO_CLI_YML)
+
+$(ARDUINO_INO_PATH):
+	mkdir --parents $(ARDUINO_SRC)
+	echo -e ''                                   >  $(ARDUINO_INO_PATH)
+	echo -e 'void setup(void)'                   >> $(ARDUINO_INO_PATH)
+	echo -e '{'                                  >> $(ARDUINO_INO_PATH)
+	echo -e "\tpinMode(LED_BUILTIN, OUTPUT);"    >> $(ARDUINO_INO_PATH)
+	echo -e '}'                                  >> $(ARDUINO_INO_PATH)
+	echo -e ''                                   >> $(ARDUINO_INO_PATH)
+	echo -e 'void loop(void)'                    >> $(ARDUINO_INO_PATH)
+	echo -e '{'                                  >> $(ARDUINO_INO_PATH)
+	echo -e "\tdigitalWrite(LED_BUILTIN, HIGH);" >> $(ARDUINO_INO_PATH)
+	echo -e "\tdelay(1000);"                     >> $(ARDUINO_INO_PATH)
+	echo -e "\tdigitalWrite(LED_BUILTIN, LOW);"  >> $(ARDUINO_INO_PATH)
+	echo -e "\tdelay(1000);"                     >> $(ARDUINO_INO_PATH)
+	echo -e '}'                                  >> $(ARDUINO_INO_PATH)
 
 compile: print_config _compile
 _compile:
