@@ -98,6 +98,10 @@ scaffold: $(ARDUINO_INO_PATH) $(ARDUINO_CLI_YML)
 	fi
 	touch .toolchain
 
+remake-toolchain: mrproper
+	rm -rf $(ARDUINO_HOME)/.arduino15
+	make .toolchain
+
 compile: print_config _compile
 _compile: .toolchain $(ARDUINO_INO_PATH)
 	rm -rf $(ARDUINO_OUT)
