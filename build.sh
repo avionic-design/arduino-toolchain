@@ -28,9 +28,13 @@ check_cmd() {
 
 reset_fail
 
+check_cmd make
+
 if test $FAIL = true
 then
 	echo "Encountered errors!"
 	echo "Please fix them before atteming to build"
 fi
 reset_fail
+
+make compile
