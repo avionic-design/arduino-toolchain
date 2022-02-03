@@ -11,6 +11,7 @@ ARDUINO_CPU := atmega328
 ARDUINO_CLI_VER := 0.20.2
 ARDUINO_CLI_LNK := https://github.com/arduino/arduino-cli/releases/download
 ARDUINO_FILE_BIN := bin
+ARDUINO_FILE_ETC := etc
 ARDUINO_FILE_RES := .res
 
 # include project settings (may override defaut settings)
@@ -19,6 +20,7 @@ ARDUINO_FILE_RES := .res
 # derived variables
 ARDUINO_CLI_PKG := $(ARDUINO_FILE_RES)/arduino-cli.tar.gz
 ARDUINO_CLI_BIN := $(ARDUINO_FILE_BIN)/arduino-cli
+ARDUINO_CLI_YML := $(ARDUINO_FILE_ETC)/arduino-cli.yml
 ARDUINO_CLI_TAR := arduino-cli_$(ARDUINO_CLI_VER)_Linux_$(BIT).tar.gz
 ARDUINO_OPT_CPU := $(shell /bin/sh -c "test -n '$(ARDUINO_CPU)' && echo ':cpu=$(ARDUINO_CPU)'")
 ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_OPT_CPU)
@@ -45,6 +47,12 @@ $(ARDUINO_CLI_BIN): $(ARDUINO_CLI_PKG)
 	cd bin && tar xvf ../$(ARDUINO_CLI_PKG) arduino-cli
 	# update timestamp since arduino-cli is older then the tar
 	touch $(ARDUINO_CLI_BIN)
+
+$(ARDUINO_CLI_YML):
+	mkdir --parents $(shell dirname $(ARDUINO_CLI_YML))
+	echo "---"                >  $(ARDUINO_CLI_YML)
+	echo "board_manager:"     >> $(ARDUINO_CLI_YML)
+	echo "  additional_urls:" >> $(ARDUINO_CLI_YML)
 
 compile: print_config _compile
 _compile:
