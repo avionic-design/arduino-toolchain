@@ -6,6 +6,11 @@
 # arduino dir
 .arduino15/
 
+# default build dirs
+bin/
+.res/
+build/
+
 # Prerequisites
 *.d
 
