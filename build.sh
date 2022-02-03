@@ -74,6 +74,7 @@ then
 	cd "$self_d"
 	rm -f config.mk
 	ln -s "$prj_d/config.mk" config.mk
+	make scaffold
 else
 	cd "$self_d"
 	make compile
