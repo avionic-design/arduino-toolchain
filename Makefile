@@ -32,6 +32,10 @@ ARDUINO_INO_FILE := $(ARDUINO_SKETCH).ino
 ARDUINO_INO_PATH := $(ARDUINO_SRC)/$(ARDUINO_INO_FILE)
 ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_OPT_CPU)
 
+# override with make ARDUINO_PORT=<port> upload
+# DO NOT CHANGE TO ':=' THIS NEEDS TO BE EVALUATED AT RUNNTIME NOT DEFINE TIME
+ARDUINO_PORT = $(shell ./$(ARDUINO_CLI_BIN) board list | head -2 | tail -1 | cut -d " " -f1)
+
 .PHONY: compile upload all clean mrproper distclean
 .DEFAULT_GOAL := compile
 
@@ -102,7 +106,13 @@ _compile: .toolchain $(ARDUINO_INO_PATH)
 	                           $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
 
 upload: print_config _upload
-_upload:
+_upload: .toolchain
+	mkdir --parents $(ARDUINO_OUT)
+	$(ARDUINO_CLI_CMD) upload --fqbn $(ARDUINO_BRD_FQBN) \
+	                          --input-dir $(ARDUINO_OUT) \
+	                          --port $(ARDUINO_PORT)     \
+	                          --verbose                  \
+	                          --verify
 
 all: print_config _compile _upload
 
