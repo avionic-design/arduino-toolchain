@@ -10,6 +10,7 @@ ARDUINO_BRD := nano
 ARDUINO_CPU := atmega328
 ARDUINO_CLI_VER := 0.20.2
 ARDUINO_CLI_LNK := https://github.com/arduino/arduino-cli/releases/download
+ARDUINO_FILE_BIN := bin
 ARDUINO_FILE_RES := .res
 
 # include project settings (may override defaut settings)
@@ -17,6 +18,7 @@ ARDUINO_FILE_RES := .res
 
 # derived variables
 ARDUINO_CLI_PKG := $(ARDUINO_FILE_RES)/arduino-cli.tar.gz
+ARDUINO_CLI_BIN := $(ARDUINO_FILE_BIN)/arduino-cli
 ARDUINO_CLI_TAR := arduino-cli_$(ARDUINO_CLI_VER)_Linux_$(BIT).tar.gz
 ARDUINO_OPT_CPU := $(shell /bin/sh -c "test -n '$(ARDUINO_CPU)' && echo ':cpu=$(ARDUINO_CPU)'")
 ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_OPT_CPU)
@@ -37,6 +39,13 @@ $(ARDUINO_CLI_PKG):
 	   && wget $(ARDUINO_CLI_LNK)/$(ARDUINO_CLI_VER)/$(ARDUINO_CLI_TAR)
 	mv $(ARDUINO_FILE_RES)/$(ARDUINO_CLI_TAR) $(ARDUINO_CLI_PKG)
 
+$(ARDUINO_CLI_BIN): $(ARDUINO_CLI_PKG)
+	mkdir --parents $(ARDUINO_FILE_BIN)
+	-rm -f $(ARDUINO_CLI_BIN)
+	cd bin && tar xvf ../$(ARDUINO_CLI_PKG) arduino-cli
+	# update timestamp since arduino-cli is older then the tar
+	touch $(ARDUINO_CLI_BIN)
+
 compile: print_config _compile
 _compile:
 
@@ -50,4 +59,5 @@ clean:
 mrproper: clean
 
 distclean: mrproper
+	rm -rf $(ARDUINO_FILE_BIN)
 	rm -rf $(ARDUINO_FILE_RES)
