@@ -81,6 +81,8 @@ $(ARDUINO_INO_PATH):
 	echo -e "\tdelay(1000);"                     >> $(ARDUINO_INO_PATH)
 	echo -e '}'                                  >> $(ARDUINO_INO_PATH)
 
+scaffold: $(ARDUINO_INO_PATH) $(ARDUINO_CLI_YML)
+
 .arduino-index: $(ARDUINO_CLI_BIN) $(ARDUINO_CLI_YML)
 	$(ARDUINO_CLI_CMD) core update-index --config-file $(ARDUINO_CLI_YML)
 	touch .arduino-index
