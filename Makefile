@@ -1,7 +1,13 @@
+# project specific config to load
+PROJECT_CONFIG := config.mk
+
 # default settings
 ARDUINO_PFM := arduino:avr
 ARDUINO_BRD := nano
 ARDUINO_CPU := atmega328
+
+# include project settings (may override defaut settings)
+-include ./$(PROJECT_CONFIG)
 
 # derived variables
 ARDUINO_OPT_CPU := $(shell /bin/sh -c "test -n '$(ARDUINO_CPU)' && echo ':cpu=$(ARDUINO_CPU)'")
