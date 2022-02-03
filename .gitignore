@@ -3,6 +3,9 @@
 .arduino-platform
 .toolchain
 
+# arduino dir
+.arduino15/
+
 # Prerequisites
 *.d
 
