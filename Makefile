@@ -9,6 +9,7 @@ ARDUINO_PFM := arduino:avr
 ARDUINO_BRD := nano
 ARDUINO_CPU := atmega328
 ARDUINO_SRC := src
+ARDUINO_HOME := $(PWD)
 ARDUINO_SKETCH := main
 ARDUINO_CLI_VER := 0.20.2
 ARDUINO_CLI_LNK := https://github.com/arduino/arduino-cli/releases/download
@@ -22,6 +23,7 @@ ARDUINO_FILE_RES := .res
 # derived variables
 ARDUINO_CLI_PKG := $(ARDUINO_FILE_RES)/arduino-cli.tar.gz
 ARDUINO_CLI_BIN := $(ARDUINO_FILE_BIN)/arduino-cli
+ARDUINO_CLI_CMD := HOME=$(ARDUINO_HOME) ./$(ARDUINO_FILE_BIN)/arduino-cli
 ARDUINO_CLI_YML := $(ARDUINO_FILE_ETC)/arduino-cli.yml
 ARDUINO_CLI_TAR := arduino-cli_$(ARDUINO_CLI_VER)_Linux_$(BIT).tar.gz
 ARDUINO_OPT_CPU := $(shell /bin/sh -c "test -n '$(ARDUINO_CPU)' && echo ':cpu=$(ARDUINO_CPU)'")
@@ -74,6 +76,10 @@ $(ARDUINO_INO_PATH):
 	echo -e "\tdelay(1000);"                     >> $(ARDUINO_INO_PATH)
 	echo -e '}'                                  >> $(ARDUINO_INO_PATH)
 
+.arduino-index: $(ARDUINO_CLI_BIN) $(ARDUINO_CLI_YML)
+	$(ARDUINO_CLI_CMD) core update-index --config-file $(ARDUINO_CLI_YML)
+	touch .arduino-index
+
 compile: print_config _compile
 _compile:
 
@@ -85,7 +91,10 @@ all: print_config _compile _upload
 clean:
 
 mrproper: clean
+	rm -f .arduino-index
+	$(ARDUINO_CLI_CMD) cache clean
 
 distclean: mrproper
 	rm -rf $(ARDUINO_FILE_BIN)
 	rm -rf $(ARDUINO_FILE_RES)
+	rm -rf $(ARDUINO_HOME)/.arduino15
