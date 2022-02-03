@@ -1,5 +1,6 @@
 # flags
 .arduino-index
+.arduino-platform
 
 # Prerequisites
 *.d

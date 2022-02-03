@@ -80,6 +80,10 @@ $(ARDUINO_INO_PATH):
 	$(ARDUINO_CLI_CMD) core update-index --config-file $(ARDUINO_CLI_YML)
 	touch .arduino-index
 
+.arduino-platform: .arduino-index
+	$(ARDUINO_CLI_CMD) core install $(ARDUINO_PFM) --config-file $(ARDUINO_CLI_YML)
+	touch .arduino-platform
+
 compile: print_config _compile
 _compile:
 
@@ -92,6 +96,7 @@ clean:
 
 mrproper: clean
 	rm -f .arduino-index
+	rm -f .arduino-platform
 	$(ARDUINO_CLI_CMD) cache clean
 
 distclean: mrproper
