@@ -8,6 +8,7 @@ BIT := $(shell /bin/sh -c 'if test  "$$(uname -i)" = x86_64; then echo 64bit; el
 ARDUINO_PFM := arduino:avr
 ARDUINO_BRD := nano
 ARDUINO_CPU := atmega328
+ARDUINO_OUT := build
 ARDUINO_SRC := src
 ARDUINO_HOME := $(PWD)
 ARDUINO_SKETCH := main
@@ -92,7 +93,13 @@ $(ARDUINO_INO_PATH):
 	touch .toolchain
 
 compile: print_config _compile
-_compile:
+_compile: .toolchain $(ARDUINO_INO_PATH)
+	rm -rf $(ARDUINO_OUT)
+	mkdir --parents $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
+	cp -rT $(ARDUINO_SRC) $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
+	$(ARDUINO_CLI_CMD) compile --fqbn $(ARDUINO_BRD_FQBN)       \
+	                           --output-dir $(ARDUINO_OUT)      \
+	                           $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
 
 upload: print_config _upload
 _upload:
@@ -100,6 +107,7 @@ _upload:
 all: print_config _compile _upload
 
 clean:
+	rm -rf $(ARDUINO_OUT)
 
 mrproper: clean
 	rm -f .toolchain
