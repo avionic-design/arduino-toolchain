@@ -32,6 +32,7 @@ check_cmd make
 check_cmd test
 check_cmd wget
 check_cmd uname
+check_cmd cp
 check_cmd mv
 check_cmd rm
 check_cmd mkdir
