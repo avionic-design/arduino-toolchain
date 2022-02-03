@@ -87,6 +87,10 @@ elif test "$1" = '--all'
 then
 	cd "$self_d"
 	make all
+elif test "$1" = '--rebuild-toolchain'
+then
+	cd "$self_d"
+	make remake-toolchain
 else
 	cd "$self_d"
 	make compile
