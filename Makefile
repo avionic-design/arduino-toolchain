@@ -84,6 +84,13 @@ $(ARDUINO_INO_PATH):
 	$(ARDUINO_CLI_CMD) core install $(ARDUINO_PFM) --config-file $(ARDUINO_CLI_YML)
 	touch .arduino-platform
 
+.toolchain: .arduino-platform
+	@if test -f $(ARDUINO_FILE_ETC)/toolchain.post;                 \
+	then                                                            \
+		./$(ARDUINO_FILE_ETC)/toolchain.post "$(ARDUINO_HOME)"; \
+	fi
+	touch .toolchain
+
 compile: print_config _compile
 _compile:
 
@@ -95,6 +102,7 @@ all: print_config _compile _upload
 clean:
 
 mrproper: clean
+	rm -f .toolchain
 	rm -f .arduino-index
 	rm -f .arduino-platform
 	$(ARDUINO_CLI_CMD) cache clean

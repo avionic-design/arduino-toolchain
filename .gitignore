@@ -1,6 +1,7 @@
 # flags
 .arduino-index
 .arduino-platform
+.toolchain
 
 # Prerequisites
 *.d
