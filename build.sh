@@ -35,6 +35,9 @@ check_cmd uname
 check_cmd mv
 check_cmd rm
 check_cmd mkdir
+check_cmd cd
+check_cmd tar
+check_cmd touch
 
 if test $FAIL = true
 then
