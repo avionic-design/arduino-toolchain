@@ -104,6 +104,13 @@ remake-toolchain: mrproper
 
 compile: print_config _compile
 _compile: .toolchain $(ARDUINO_INO_PATH)
+	@if test -f $(ARDUINO_FILE_ETC)/libs.list;                      \
+	then                                                            \
+		cat ./$(ARDUINO_FILE_ETC)/libs.list                     \
+			| HOME=$(ARDUINO_HOME) xargs -I {}              \
+				./$(ARDUINO_FILE_BIN)/arduino-cli       \
+					lib install "{}";               \
+	fi
 	rm -rf $(ARDUINO_OUT)
 	mkdir --parents $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
 	cp -rT $(ARDUINO_SRC) $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
