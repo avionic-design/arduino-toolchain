@@ -5,6 +5,10 @@
 
 # arduino dir
 .arduino15/
+Arduino/
+
+# config
+config.mk
 
 # default build dirs
 bin/
