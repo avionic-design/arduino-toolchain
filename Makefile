@@ -34,7 +34,9 @@ ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_OPT_CPU)
 
 # override with make ARDUINO_PORT=<port> upload
 # DO NOT CHANGE TO ':=' THIS NEEDS TO BE EVALUATED AT RUNNTIME NOT DEFINE TIME
-ARDUINO_PORT = $(shell ./$(ARDUINO_CLI_BIN) board list | head -2 | tail -1 | cut -d " " -f1)
+ifndef ARDUINO_PORT
+	ARDUINO_PORT = $(shell ./$(ARDUINO_CLI_BIN) board list | head -2 | tail -1 | cut -d " " -f1)
+endif
 
 .PHONY: compile upload all clean mrproper distclean
 .DEFAULT_GOAL := compile
