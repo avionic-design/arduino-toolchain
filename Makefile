@@ -1,6 +1,9 @@
 # project specific config to load
 PROJECT_CONFIG := config.mk
 
+# host specific config to load
+HOST_CONFIG := host.mk
+
 # host arch
 BIT := $(shell /bin/sh -c 'if test  "$$(uname -i)" = x86_64; then echo 64bit; else echo 32bit; fi')
 
@@ -20,6 +23,8 @@ ARDUINO_FILE_RES := .res
 
 # include project settings (may override defaut settings)
 -include ./$(PROJECT_CONFIG)
+# include host settings (may override defaut/project settings)
+-include ./$(HOST_CONFIG)
 
 # derived variables
 ARDUINO_CLI_PKG := $(ARDUINO_FILE_RES)/arduino-cli.tar.gz
