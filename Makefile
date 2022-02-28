@@ -122,6 +122,7 @@ _compile: .toolchain $(ARDUINO_INO_PATH)
 
 upload: print_config _upload
 _upload: .toolchain
+	@printf "PORT:     %s\n" "$(ARDUINO_PORT)"
 	mkdir --parents $(ARDUINO_OUT)
 	$(ARDUINO_CLI_CMD) upload --fqbn $(ARDUINO_BRD_FQBN) \
 	                          --input-dir $(ARDUINO_OUT) \
