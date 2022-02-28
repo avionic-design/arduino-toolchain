@@ -36,7 +36,6 @@ check_cmd cp
 check_cmd mv
 check_cmd rm
 check_cmd mkdir
-check_cmd cd
 check_cmd tar
 check_cmd realpath
 check_cmd dirname
