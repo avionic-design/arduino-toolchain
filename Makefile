@@ -33,7 +33,7 @@ ARDUINO_CLI_CMD := HOME=$(ARDUINO_HOME) ./$(ARDUINO_FILE_BIN)/arduino-cli
 ARDUINO_CLI_YML := $(ARDUINO_FILE_ETC)/arduino-cli.yml
 ARDUINO_CLI_TAR := arduino-cli_$(ARDUINO_CLI_VER)_Linux_$(BIT).tar.gz
 ARDUINO_OPT_CPU := $(shell /bin/sh -c "test -n '$(ARDUINO_CPU)' && echo ':cpu=$(ARDUINO_CPU)'")
-ARDUINO_INO_FILE := $(ARDUINO_SKETCH).ino
+ARDUINO_INO_FILE := $(ARDUINO_SKETCH).cpp
 ARDUINO_INO_PATH := $(ARDUINO_SRC)/$(ARDUINO_INO_FILE)
 ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_OPT_CPU)
 
@@ -121,6 +121,8 @@ _compile: .toolchain $(ARDUINO_INO_PATH)
 	rm -rf $(ARDUINO_OUT)
 	mkdir --parents $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
 	cp -rT $(ARDUINO_SRC) $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
+	mv $(ARDUINO_OUT)/$(ARDUINO_SKETCH)/$(ARDUINO_SKETCH).cpp \
+	   $(ARDUINO_OUT)/$(ARDUINO_SKETCH)/$(ARDUINO_SKETCH).ino
 	$(ARDUINO_CLI_CMD) compile --fqbn $(ARDUINO_BRD_FQBN)       \
 	                           --output-dir $(ARDUINO_OUT)      \
 	                           $(ARDUINO_OUT)/$(ARDUINO_SKETCH)
