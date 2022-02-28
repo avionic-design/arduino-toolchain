@@ -72,7 +72,10 @@ then
 	fi
 	cd "$self_d"
 	rm -f config.mk
+	rm -f host.mk
+	touch "$prj_d/host.mk"
 	ln -s "$prj_d/config.mk" config.mk
+	ln -s "$prj_d/host.mk" host.mk
 	make scaffold
 elif test "$1" = '--compile'
 then
