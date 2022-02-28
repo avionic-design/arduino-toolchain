@@ -9,6 +9,7 @@ Arduino/
 
 # config
 config.mk
+host.mk
 
 # default build dirs
 bin/
