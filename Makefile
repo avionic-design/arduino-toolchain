@@ -11,6 +11,8 @@ BIT := $(shell /bin/sh -c 'if test  "$$(uname -i)" = x86_64; then echo 64bit; el
 ARDUINO_PFM := arduino:avr
 ARDUINO_BRD := nano
 ARDUINO_CPU := atmega328
+ARDUINO_PNR :=
+ARDUINO_OPT :=
 ARDUINO_OUT := build
 ARDUINO_SRC := src
 ARDUINO_HOME := $(PWD)
@@ -33,9 +35,14 @@ ARDUINO_CLI_CMD := HOME=$(ARDUINO_HOME) ./$(ARDUINO_FILE_BIN)/arduino-cli
 ARDUINO_CLI_YML := $(ARDUINO_FILE_ETC)/arduino-cli.yml
 ARDUINO_CLI_TAR := arduino-cli_$(ARDUINO_CLI_VER)_Linux_$(BIT).tar.gz
 ARDUINO_OPT_CPU := $(shell /bin/sh -c "test -n '$(ARDUINO_CPU)' && echo ':cpu=$(ARDUINO_CPU)'")
+ARDUINO_OPT_PNR := $(shell /bin/sh -c "test -n '$(ARDUINO_PNR)' && echo ':pnum=$(ARDUINO_PNR)'")
+ARDUINO_OPT_OPT := $(shell /bin/sh -c "test -n '$(ARDUINO_OPT)' && echo ':$(ARDUINO_OPT)'")
 ARDUINO_INO_FILE := $(ARDUINO_SKETCH).cpp
 ARDUINO_INO_PATH := $(ARDUINO_SRC)/$(ARDUINO_INO_FILE)
-ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_OPT_CPU)
+ARDUINO_BRD_OPTS := $(shell echo "$(ARDUINO_OPT_CPU)$(ARDUINO_OPT_PNR)$(ARDUINO_OPT_OPT)" | sed 's#:#,#2g')
+ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_BRD_OPTS)
+
+export PATH := $(PWD)/$(ARDUINO_FILE_BIN):$(PATH)
 
 # override with make ARDUINO_PORT=<port> upload
 # DO NOT CHANGE TO ':=' THIS NEEDS TO BE EVALUATED AT RUNNTIME NOT DEFINE TIME
