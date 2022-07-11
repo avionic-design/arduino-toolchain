@@ -39,7 +39,7 @@ ARDUINO_OPT_PNR := $(shell /bin/sh -c "test -n '$(ARDUINO_PNR)' && echo ':pnum=$
 ARDUINO_OPT_OPT := $(shell /bin/sh -c "test -n '$(ARDUINO_OPT)' && echo ':$(ARDUINO_OPT)'")
 ARDUINO_INO_FILE := $(ARDUINO_SKETCH).cpp
 ARDUINO_INO_PATH := $(ARDUINO_SRC)/$(ARDUINO_INO_FILE)
-ARDUINO_BRD_OPTS := $(shell echo "$(ARDUINO_OPT_CPU)$(ARDUINO_OPT_PNR)$(ARDUINO_OPT_OPT)" | sed 's#:#,#2g')
+ARDUINO_BRD_OPTS := $(shell echo "$(ARDUINO_OPT_CPU)$(ARDUINO_OPT_PNR)$(ARDUINO_OPT_OPT)" | sed 's/:/,/2g')
 ARDUINO_BRD_FQBN := $(ARDUINO_PFM):$(ARDUINO_BRD)$(ARDUINO_BRD_OPTS)
 
 export PATH := $(PWD)/$(ARDUINO_FILE_BIN):$(PATH)
